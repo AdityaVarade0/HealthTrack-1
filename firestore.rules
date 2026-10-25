@@ -1,0 +1,77 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // Default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-\\.]+$');
+    }
+
+    // User profiles collection
+    match /users/{userId} {
+      allow get: if isOwner(userId);
+      allow create: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && request.resource.data.email is string
+        && request.resource.data.email.size() <= 150;
+      allow update: if isOwner(userId)
+        && request.resource.data.uid == userId
+        && (!request.resource.data.diff(resource.data).affectedKeys().hasAny(['role', 'uid']));
+      allow delete: if false;
+    }
+
+    // Patients subcollections
+    match /patients/{patientUid} {
+      allow get: if isOwner(patientUid);
+
+      match /medications/{medicationId} {
+        allow read: if isOwner(patientUid);
+        allow create: if isOwner(patientUid)
+          && isValidId(medicationId)
+          && request.resource.data.name is string
+          && request.resource.data.name.size() <= 120
+          && request.resource.data.dosage is string
+          && request.resource.data.dosage.size() <= 60
+          && request.resource.data.patientUid == patientUid;
+        allow update: if isOwner(patientUid)
+          && isValidId(medicationId)
+          && request.resource.data.patientUid == patientUid;
+        allow delete: if isOwner(patientUid) && isValidId(medicationId);
+      }
+
+      match /healthRecords/{recordId} {
+        allow read: if isOwner(patientUid);
+        allow create: if isOwner(patientUid)
+          && isValidId(recordId)
+          && request.resource.data.patientUid == patientUid;
+        allow update: if isOwner(patientUid)
+          && isValidId(recordId)
+          && request.resource.data.patientUid == patientUid;
+        allow delete: if isOwner(patientUid) && isValidId(recordId);
+      }
+
+      match /activity/{activityId} {
+        allow read: if isOwner(patientUid);
+        allow create: if isOwner(patientUid)
+          && isValidId(activityId)
+          && request.resource.data.patientUid == patientUid;
+        allow update: if isOwner(patientUid)
+          && isValidId(activityId)
+          && request.resource.data.patientUid == patientUid;
+        allow delete: if isOwner(patientUid) && isValidId(activityId);
+      }
+    }
+  }
+}

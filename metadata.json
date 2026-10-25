@@ -1,0 +1,6 @@
+{
+  "name": "HealthTrack - Patient Wellness & Medication Dashboard",
+  "description": "Comprehensive personal health companion for tracking daily medications, vital health readings, adherence streaks, and reminder alerts.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

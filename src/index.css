@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --ink: #172b4d;
+    --muted: #6b778c;
+    --line: #e4e9f2;
+    --bg: #f8fafc;
+    --purple: #6558d3;
+    --purple-hover: #5446c7;
+    --purple-light: #f1effe;
+    --mint: #e6f9f2;
+    --green: #239b76;
+    --peach: #fff2e8;
+    --peach-text: #d97736;
+  }
+
+  body {
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    background-color: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1, h2, h3, h4, h5, h6, .font-heading {
+    font-family: 'Manrope', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  }
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #d5dce6;
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #b5c0d0;
+}
+
+@keyframes pulseGently {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.04); opacity: 0.9; }
+}
+
+.animate-gentle-pulse {
+  animation: pulseGently 3s ease-in-out infinite;
+}

@@ -1,0 +1,100 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Patient user profile and contact details",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "description": "Firebase Authentication UID" },
+        "displayName": { "type": "string", "maxLength": 100, "description": "Patient display name" },
+        "email": { "type": "string", "maxLength": 150, "description": "Patient email address" },
+        "phone": { "type": "string", "maxLength": 30, "description": "Patient phone number" },
+        "role": { "type": "string", "enum": ["patient", "doctor", "admin"], "description": "User role" },
+        "status": { "type": "string", "enum": ["active", "archived"], "description": "Account status" },
+        "patientId": { "type": "string", "maxLength": 50, "description": "Patient ID identifier" },
+        "reminderEnabled": { "type": "boolean", "description": "Whether reminders are enabled" },
+        "reminderSound": { "type": "boolean", "description": "Whether reminder audio chimes are enabled" },
+        "createdAt": { "type": "string", "description": "Creation timestamp" },
+        "updatedAt": { "type": "string", "description": "Last update timestamp" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Medication": {
+      "title": "Medication",
+      "description": "Prescribed medicine details, schedule, and adherence status",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "patientUid": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 120 },
+        "dosage": { "type": "string", "maxLength": 60 },
+        "time": { "type": "string", "maxLength": 10 },
+        "timeSlot": { "type": "string", "maxLength": 20 },
+        "instructions": { "type": "string", "maxLength": 500 },
+        "frequency": { "type": "string", "maxLength": 30 },
+        "pillsRemaining": { "type": "number" },
+        "refillReminder": { "type": "boolean" },
+        "takenDate": { "type": "string", "maxLength": 20 },
+        "lastTakenTime": { "type": "string", "maxLength": 50 },
+        "isActive": { "type": "boolean" },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["name", "dosage", "time", "patientUid"]
+    },
+    "HealthRecord": {
+      "title": "HealthRecord",
+      "description": "Patient vital measurements and clinical notes",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "patientUid": { "type": "string", "maxLength": 128 },
+        "date": { "type": "string" },
+        "bp": { "type": "string", "maxLength": 30 },
+        "systolic": { "type": "number" },
+        "diastolic": { "type": "number" },
+        "sugar": { "type": "number" },
+        "sugarContext": { "type": "string", "maxLength": 30 },
+        "weight": { "type": "number" },
+        "pulse": { "type": "number" },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["patientUid", "date"]
+    },
+    "ActivityItem": {
+      "title": "ActivityItem",
+      "description": "Audit and activity log of medication doses, readings, and reminders",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "patientUid": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 150 },
+        "description": { "type": "string", "maxLength": 500 },
+        "icon": { "type": "string", "maxLength": 20 },
+        "type": { "type": "string", "maxLength": 30 },
+        "date": { "type": "string" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["patientUid", "title"]
+    }
+  },
+  "firestore": {
+    "/users/{uid}": {
+      "schema": { "$ref": "UserProfile" },
+      "description": "Authenticated user profiles"
+    },
+    "/patients/{patientUid}/medications/{medicationId}": {
+      "schema": { "$ref": "Medication" },
+      "description": "Patient prescribed medications subcollection"
+    },
+    "/patients/{patientUid}/healthRecords/{recordId}": {
+      "schema": { "$ref": "HealthRecord" },
+      "description": "Patient vitals and clinical health readings"
+    },
+    "/patients/{patientUid}/activity/{activityId}": {
+      "schema": { "$ref": "ActivityItem" },
+      "description": "Patient activity audit trail and reminder history"
+    }
+  }
+}

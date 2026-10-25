@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>HealthTrack | Patient Wellness Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-mark">+</div><div><strong>HealthTrack</strong><small>Patient wellness</small></div></div>
+      <div class="side-label">WORKSPACE</div>
+      <button class="nav-item active" data-page="dashboard"><span>▦</span> Dashboard</button>
+      <button class="nav-item" data-page="medications"><span>✚</span> Medications</button>
+      <button class="nav-item" data-page="health"><span>♡</span> Health records</button>
+      <button class="nav-item" data-page="history"><span>◷</span> History & reminders</button>
+      <div class="sidebar-bottom">
+        <div class="help-card"><div class="help-icon">✦</div><strong>Stay on track</strong><p>Small habits today can support a healthier tomorrow.</p></div>
+        <div class="user-mini"><div class="avatar" id="sideAvatar">P</div><div><strong id="sideName">Patient</strong><small id="sideId">Patient ID: —</small></div><button id="logoutBtn" title="Log out">↪</button></div>
+      </div>
+    </aside>
+
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow" id="dateLabel">YOUR HEALTH, IN ONE PLACE</div><h1 id="pageTitle">Dashboard</h1></div>
+        <div class="top-actions"><span class="secure-pill"><span class="green-dot"></span> Personal workspace</span><button class="avatar" id="topAvatar">P</button></div>
+      </header>
+
+      <section id="authView" class="auth-layout hidden">
+        <div class="auth-art"><div class="art-orbit orbit-one"></div><div class="art-orbit orbit-two"></div><div class="health-symbol">+</div><p class="eyebrow">YOUR DAILY HEALTH COMPANION</p><h2>Make your health<br/>a daily priority.</h2><p>Keep medication plans and health readings together in one simple place.</p><div class="auth-points"><span>✓ Medication tracking</span><span>✓ Health record history</span><span>✓ Missed-dose alerts demo</span></div></div>
+        <div class="auth-card"><div class="auth-tabs"><button class="auth-tab selected" data-auth="login">Log in</button><button class="auth-tab" data-auth="register">Create account</button></div>
+          <form id="loginForm" class="auth-form"><h2>Welcome back</h2><p class="muted">Log in to view your HealthTrack workspace.</p><label>Email address</label><input id="loginId" type="email" required placeholder="you@example.com"/><label>Password</label><input id="loginPassword" type="password" required placeholder="Enter your password"/><button class="primary full" type="submit">Log in <span>→</span></button><p class="form-note">Demo only: your information stays in this browser.</p></form>
+          <form id="registerForm" class="auth-form hidden"><h2>Create your account</h2><p class="muted">Set up your personal health workspace.</p><div class="form-grid"><div><label>Patient ID (optional)</label><input id="regId" placeholder="e.g. 101"/></div><div><label>Full name</label><input id="regName" required placeholder="Your name"/></div><div class="span-two"><label>Email</label><input id="regEmail" type="email" required placeholder="you@example.com"/></div><div><label>Phone</label><input id="regPhone" required placeholder="Phone number"/></div><div><label>Password</label><input id="regPassword" type="password" required minlength="4" placeholder="Create password"/></div></div><button class="primary full" type="submit">Create account <span>→</span></button><p class="form-note">Use sample data only. This demo is not a secure medical record system.</p></form>
+        </div>
+      </section>
+
+      <section id="dashboardPage" class="page">
+        <div class="welcome-row"><div><h2>Good to see you, <span id="welcomeName">there</span> <span class="wave">✦</span></h2><p class="muted">Here’s your health overview for today.</p></div><button class="primary" data-open="medicationModal">＋ Add medication</button></div>
+        <div class="stats-grid">
+          <article class="stat-card"><div class="stat-top"><span>Medication plan</span><span class="stat-icon purple">✚</span></div><strong id="medCount">0</strong><small>medications added</small><div class="stat-foot"><span class="tiny-dot purple-dot"></span> Keep your schedule updated</div></article>
+          <article class="stat-card"><div class="stat-top"><span>Today's status</span><span class="stat-icon mint">✓</span></div><strong id="takenCount">0 <em>/ 0</em></strong><small>marked as taken today</small><div class="progress"><span id="takenProgress"></span></div></article>
+          <article class="stat-card"><div class="stat-top"><span>Health records</span><span class="stat-icon peach">♡</span></div><strong id="recordCount">0</strong><small>readings saved</small><div class="stat-foot"><span class="tiny-dot peach-dot"></span> Track changes over time</div></article>
+        </div>
+        <div class="content-grid">
+          <article class="panel medication-panel"><div class="panel-heading"><div><h3>Medication schedule</h3><p class="muted">Your current medication plan</p></div><button class="text-button" data-page="medications">View all ↗</button></div><div id="dashboardMeds" class="med-list"></div><div id="emptyMeds" class="empty-state"><div class="empty-icon">✚</div><strong>No medication added yet</strong><p>Add your first medication to start tracking.</p><button class="secondary" data-open="medicationModal">Add medication</button></div></article>
+          <article class="panel health-panel"><div class="panel-heading"><div><h3>Latest health readings</h3><p class="muted">Your most recent saved values</p></div><button class="text-button" data-page="health">View records ↗</button></div><div id="latestReadings"></div><div class="tip-card"><div class="tip-icon">✦</div><div><strong>Keep your records current</strong><p>Record readings as advised by your healthcare professional.</p></div></div></article>
+        </div>
+        <div class="bottom-banner"><div class="banner-icon">♡</div><div><strong>Your health journey, one day at a time.</strong><p>HealthTrack helps you organize information so you can discuss it with your healthcare team.</p></div><button class="secondary" data-page="health">Update health data →</button></div>
+      </section>
+
+      <section id="medicationsPage" class="page hidden">
+        <div class="page-intro"><div><h2>Medication plan</h2><p class="muted">Add your medicine details and mark doses as taken.</p></div><button class="primary" data-open="medicationModal">＋ Add medication</button></div>
+        <div class="panel"><div class="panel-heading"><div><h3>Your medications</h3><p class="muted">Medication information entered by you</p></div><span class="count-chip" id="medPageCount">0 items</span></div><div id="allMeds" class="table-list"></div><div id="emptyAllMeds" class="empty-state"><div class="empty-icon">✚</div><strong>Your medication list is empty</strong><p>Add a medication to see it listed here.</p></div></div>
+      </section>
+
+      <section id="healthPage" class="page hidden">
+        <div class="page-intro"><div><h2>Health records</h2><p class="muted">Save blood pressure, blood sugar and weight readings.</p></div></div>
+        <div class="health-layout"><article class="panel"><div class="panel-heading"><div><h3>Record a reading</h3><p class="muted">Enter values from your latest measurement.</p></div><span class="stat-icon peach">♡</span></div>
+          <form id="healthForm" class="stack-form"><label>Blood pressure <span class="optional">e.g. 120/80</span></label><input id="bpInput" placeholder="120/80"/><label>Blood sugar <span class="optional">e.g. 100 mg/dL</span></label><input id="sugarInput" placeholder="100"/><label>Weight (kg)</label><input id="weightInput" type="number" min="0" step="0.1" placeholder="65.5"/><label>Notes (optional)</label><textarea id="healthNotes" rows="3" placeholder="Any notes for your own reference"></textarea><button class="primary" type="submit">Save health record →</button></form></article>
+          <article class="panel"><div class="panel-heading"><div><h3>Latest reading</h3><p class="muted">Most recently saved record</p></div></div><div id="healthSummary"></div><div class="disclaimer">These records are for personal organization only and do not provide a diagnosis. Ask a healthcare professional how to interpret your readings.</div></article></div>
+        <article class="panel records-panel"><div class="panel-heading"><div><h3>Record history</h3><p class="muted">Previously saved health readings</p></div></div><div id="healthHistory" class="table-list"></div><div id="emptyHealthHistory" class="empty-state"><strong>No health records yet</strong><p>Your saved readings will appear here.</p></div></article>
+      </section>
+
+      <section id="historyPage" class="page hidden">
+        <div class="page-intro"><div><h2>History & reminders</h2><p class="muted">Review medication status and missed-dose demo alerts.</p></div></div>
+        <div class="panel"><div class="panel-heading"><div><h3>Reminder activity</h3><p class="muted">Actions recorded in this browser</p></div><button class="secondary" id="clearHistory">Clear activity</button></div><div id="activityList" class="activity-list"></div><div id="emptyActivity" class="empty-state"><div class="empty-icon">◷</div><strong>No activity yet</strong><p>Medication actions and reminder results will appear here.</p></div></div>
+        <div class="notice"><strong>Important:</strong> This website demonstrates alerts on screen only. It does not send real SMS, email, doctor or family notifications, and it does not replace medical advice.</div>
+      </section>
+      <footer class="footer"><span>© 2026 HealthTrack demo</span><span>Privacy-minded prototype · Sample data recommended</span></footer>
+    </main>
+  </div>
+
+  <div id="medicationModal" class="modal hidden"><div class="modal-backdrop" data-close="medicationModal"></div><div class="modal-card"><div class="modal-heading"><div><h2>Add medication</h2><p class="muted">Enter the details from your prescribed plan.</p></div><button class="close-button" data-close="medicationModal">×</button></div><form id="medicationForm" class="stack-form"><label>Medicine name</label><input id="medicineName" required placeholder="e.g. Medicine name"/><label>Dosage</label><input id="medicineDosage" required placeholder="e.g. 500 mg"/><label>Time</label><input id="medicineTime" required type="time"/><label>Instructions (optional)</label><input id="medicineInstructions" placeholder="e.g. As advised by clinician"/><button class="primary full" type="submit">Save medication</button></form></div></div>
+  <div id="toast" class="toast"></div>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+  <script src="firebase-config.js"></script>
+  <script src="firebase-init.js"></script>
+  <script src="firestore-service.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
